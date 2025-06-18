@@ -3,6 +3,8 @@
 #include <fc/optional.hpp>
 #include <string>
 
+#include <stdint.h>
+
 namespace fc
 {
     using std::string;

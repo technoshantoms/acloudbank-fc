@@ -88,33 +88,6 @@ else ( WIN32 )
 endif ( WIN32 )
 # End configure secp256k1-zkp
 
-# Configure editline
-if ( NOT WIN32 )
-    include(ExternalProject)
-
-    ExternalProject_Add( project_editline
-     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/vendor/editline
-     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/editline
-     CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vendor/editline/configure --prefix=${CMAKE_CURRENT_BINARY_DIR}/vendor/editline
-     BUILD_COMMAND make
-     INSTALL_COMMAND true
-     BUILD_BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/vendor/editline/src/project_editline-build/src/.libs/libeditline.a
-    )
-
-    ExternalProject_Add_Step(project_editline autogen
-     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vendor/editline
-     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vendor/editline/autogen.sh
-     DEPENDERS configure
-    )
-    ExternalProject_Get_Property(project_editline binary_dir)
-    add_library(editline STATIC IMPORTED)
-    set_property(TARGET editline PROPERTY IMPORTED_LOCATION ${binary_dir}/src/.libs/libeditline${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set_property(TARGET editline PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/vendor/editline/include)
-    add_dependencies(editline project_editline)
-    install( FILES ${binary_dir}/src/.libs/libeditline${CMAKE_STATIC_LIBRARY_SUFFIX} DESTINATION lib/cryptonomex )
-endif ( NOT WIN32 )
-# End configure editline
-
 IF( WIN32 )
   MESSAGE(STATUS "Configuring fc to build on Win32")
 
@@ -134,7 +107,11 @@ IF( WIN32 )
   # iphlpapi.lib
 ENDIF(WIN32)
 
-set(Boost_DIR "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/Boost")
+find_package(websocketpp REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(libeditline REQUIRED)
+
 FIND_PACKAGE(Boost CONFIG COMPONENTS ${BOOST_COMPONENTS} )
 
 IF(NOT WIN32)
@@ -237,8 +214,6 @@ set( sources
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/git_revision.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/git_revision.cpp" @ONLY)
 list(APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/git_revision.cpp")
 list(APPEND sources ${fc_headers})
-
-add_subdirectory( vendor/websocketpp EXCLUDE_FROM_ALL )
 
 add_library( fc ${sources} )
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION include )
@@ -440,3 +415,4 @@ endif(MSVC)
 INCLUDE(CheckLibcxxAtomic)
 
 MESSAGE(STATUS "Finished fc module configuration...")
+

@@ -4,10 +4,11 @@
 #include <fc/thread/spin_lock.hpp>
 #include <fc/thread/scoped_lock.hpp>
 #include <fc/log/appender.hpp>
+#include <fc/log/logger_config.hpp>
 #include <fc/filesystem.hpp>
 #include <unordered_map>
 #include <string>
-#include <fc/log/logger_config.hpp>
+#include <algorithm>
 
 namespace fc {
 

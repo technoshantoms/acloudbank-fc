@@ -153,6 +153,7 @@ function(get_git_unix_timestamp _var)
 		"show"
                 "-s"
                 "--format=%ct"
+                "--no-show-signature"
 		${hash}
 		${ARGN}
 		WORKING_DIRECTORY

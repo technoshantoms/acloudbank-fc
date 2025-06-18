@@ -353,7 +353,7 @@ namespace fc
         template<typename T>
         variant& operator=( T&& v )
         {
-           return *this = variant( std::forward<T>(v) );
+           return *this = variant( std::forward<T>(v), FC_PACK_MAX_DEPTH );
         }
 
         template<typename T>

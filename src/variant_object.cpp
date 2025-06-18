@@ -407,4 +407,14 @@ namespace fc
       vo = var.get_object();
    }
 
+   void to_variant( const limited_mutable_variant_object& var, variant& vo, uint32_t max_depth )
+   {
+      vo = variant(var);
+   }
+
+   void from_variant( const variant& var, limited_mutable_variant_object& vo, uint32_t max_depth )
+   {
+      (mutable_variant_object&)vo = var.get_object();
+   }
+
 } // namesapce fc

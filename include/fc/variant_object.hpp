@@ -255,5 +255,9 @@ namespace fc
    void to_variant( const mutable_variant_object& var, variant& vo, uint32_t max_depth = 1 );
    /** @ingroup Serializable */
    void from_variant( const variant& var, mutable_variant_object& vo, uint32_t max_depth = 1 );
+   /** @ingroup Serializable */
+   void to_variant( const limited_mutable_variant_object& var, variant& vo, uint32_t max_depth = 1 );
+   /** @ingroup Serializable */
+   void from_variant( const variant& var, limited_mutable_variant_object& vo, uint32_t max_depth = 1 );
 
 } // namespace fc
